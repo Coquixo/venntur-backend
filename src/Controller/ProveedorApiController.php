@@ -33,7 +33,7 @@ class ProveedorApiController extends AbstractController
             ];
         }, $proveedores);
 
-        return $this->json($data);
+        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
     }
 
     #[Route('/actividades', name: 'api_actividades_proveedor', methods: ['GET'])]
@@ -62,6 +62,6 @@ class ProveedorApiController extends AbstractController
         return $this->json([
             'con_proveedor' => array_map($serializeActividad, $actividadesConProveedor),
             'sin_proveedor' => array_map($serializeActividad, $actividadesSinProveedor),
-        ]);
+        ], 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
     }
 }

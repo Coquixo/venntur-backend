@@ -23,7 +23,6 @@ class ActividadApiController extends AbstractController
     {
         $actividades = $this->actividadRepository->findAll();
 
-        // Filtrar para quitar descripcion_larga
         $data = array_map(function($actividad) {
             return [
                 'id' => $actividad->getId(),
@@ -34,7 +33,7 @@ class ActividadApiController extends AbstractController
             ];
         }, $actividades);
 
-        return $this->json($data);
+        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
     }
 
     #[Route('/{id}', name: 'api_actividad_detail', methods: ['GET'])]
@@ -43,7 +42,7 @@ class ActividadApiController extends AbstractController
         $actividad = $this->actividadRepository->find($id);
 
         if (!$actividad) {
-            return $this->json(['error' => 'Actividad no encontrada'], 404);
+            return $this->json(['error' => 'Actividad no encontrada'], 404, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
         }
 
         $data = [
@@ -55,7 +54,7 @@ class ActividadApiController extends AbstractController
             'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
         ];
 
-        return $this->json($data);
+        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
     }
 
     #[Route('/search', name: 'api_actividad_search', methods: ['GET'])]
@@ -79,6 +78,6 @@ class ActividadApiController extends AbstractController
             ];
         }, $actividades);
 
-        return $this->json($data);
+        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
     }
 }
