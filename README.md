@@ -1,4 +1,4 @@
-# ventuur-backends
+# venntur-backends
 
 
 # Configuración y carga de base de datos local
@@ -33,7 +33,7 @@ DATABASE_URL="mysql://username:password@127.0.0.1:3306/mi_base?serverVersion=9.3
 
 Reemplaza `username`, `password` y `mi_base` con tus propios valores.
 Por ejemplo:
- - DATABASE_URL="mysql://root:@127.0.0.1:3306/ventuur?serverVersion=9.3.0" 
+ - DATABASE_URL="mysql://root:@127.0.0.1:3306/venntur?serverVersion=9.3.0" 
 
 ## 3. Crear la base de datos
 

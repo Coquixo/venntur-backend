@@ -2,22 +2,28 @@
 
 namespace App\Controller;
 
+
+
 use App\Repository\ProveedorRepository;
 use App\Repository\ActividadRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Psr\Log\LoggerInterface;
+
 
 #[Route('/api/proveedores')]
 class ProveedorApiController extends AbstractController
 {
     private $proveedorRepository;
     private $actividadRepository;
+    public $logger;
 
-    public function __construct(ProveedorRepository $proveedorRepository, ActividadRepository $actividadRepository)
+    public function __construct(ProveedorRepository $proveedorRepository, ActividadRepository $actividadRepository, LoggerInterface $logger)
     {
         $this->proveedorRepository = $proveedorRepository;
         $this->actividadRepository = $actividadRepository;
+        $this->logger = $logger;
     }
 
     #[Route('', name: 'api_proveedores_list', methods: ['GET'])]
@@ -25,7 +31,7 @@ class ProveedorApiController extends AbstractController
     {
         $proveedores = $this->proveedorRepository->findAll();
 
-        $data = array_map(function($proveedor) {
+        $data = array_map(function ($proveedor) {
             return [
                 'id' => $proveedor->getId(),
                 'nombre' => $proveedor->getNombre(),
@@ -49,11 +55,13 @@ class ProveedorApiController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        $serializeActividad = function($actividad) {
+
+        $serializeActividad = function ($actividad) {
             return [
                 'id' => $actividad->getId(),
                 'nombre' => $actividad->getNombre(),
                 'descripcion_corta' => $actividad->getDescripcionCorta(),
+                'descripcion_larga' => $actividad->getDescripcionLarga(),
                 'precio' => $actividad->getPrecio(),
                 'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
             ];

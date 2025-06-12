@@ -32,6 +32,7 @@ class ActividadApiController extends AbstractController
                 'id' => $actividad->getId(),
                 'nombre' => $actividad->getNombre(),
                 'descripcion_corta' => $actividad->getDescripcionCorta(),
+                'descripcion_larga' => $actividad->getDescripcionLarga(),
                 'precio' => $actividad->getPrecio(),
                 'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
             ];
@@ -77,6 +78,7 @@ class ActividadApiController extends AbstractController
                 'id' => $actividad->getId(),
                 'nombre' => $actividad->getNombre(),
                 'descripcion_corta' => $actividad->getDescripcionCorta(),
+                'descripcion_larga' => $actividad->getDescripcionLarga(),
                 'precio' => $actividad->getPrecio(),
                 'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
             ];
