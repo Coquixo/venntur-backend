@@ -21,9 +21,13 @@ class ActividadApiController extends AbstractController
     #[Route('', name: 'api_actividades_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'No autenticado'], 401);
+        }
         $actividades = $this->actividadRepository->findAll();
 
-        $data = array_map(function($actividad) {
+        $data = array_map(function ($actividad) {
             return [
                 'id' => $actividad->getId(),
                 'nombre' => $actividad->getNombre(),
@@ -64,11 +68,11 @@ class ActividadApiController extends AbstractController
 
         $actividades = $this->actividadRepository->createQueryBuilder('a')
             ->where('a.nombre LIKE :q')
-            ->setParameter('q', '%'.$query.'%')
+            ->setParameter('q', '%' . $query . '%')
             ->getQuery()
             ->getResult();
 
-        $data = array_map(function($actividad) {
+        $data = array_map(function ($actividad) {
             return [
                 'id' => $actividad->getId(),
                 'nombre' => $actividad->getNombre(),

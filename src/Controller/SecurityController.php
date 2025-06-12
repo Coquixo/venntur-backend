@@ -21,18 +21,18 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastEmail = $authenticationUtils->getLastUsername();
 
-        if (!$error) {
+        if (!$error) { //TODO: not working, resolve later
             return new JsonResponse([
                 'status' => 'success',
-                'input_email' => $email,
+                'email' => $email,
             ]);
         }
         return new JsonResponse([
             'status' => 'error',
             'error' => $error->getMessage(),
             'last_email' => $lastEmail,
-            'input_email' => $email,
-        ], 401);
+            'email' => $email,
+        ], 402);
     }
 
     #[Route(path: '/logout', name: 'logout')]
