@@ -7,37 +7,32 @@ use Psr\Log\LoggerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'login', methods: ['POST'])]
-    public function login(AuthenticationUtils $authenticationUtils, LoggerInterface $logger)
+    public function login(Request $request, AuthenticationUtils $authenticationUtils, LoggerInterface $logger)
     {
-        // obtener el error de login si hay
-        
+        $data = json_decode($request->getContent(), true);
+        $email = $data['email'] ?? null;
         $error = $authenticationUtils->getLastAuthenticationError();
-        // último email ingresado por el usuario (Symfony llama a getLastUsername pero aquí será email)
         $lastEmail = $authenticationUtils->getLastUsername();
-        $logger->info('Intento de login', [
-            'lastEmail' => $lastEmail,
-            'error' => $error ? $error->getMessage() : null,
-        ]);
 
-        if ($error) {
+        if (!$error) {
             return new JsonResponse([
-                'error' => $error->getMessage(),
-                'last_email' => $lastEmail,
-            ], 401);
+                'status' => 'success',
+                'input_email' => $email,
+            ]);
         }
-
-        // Si no hay error, normalmente Symfony redirige o da token, 
-        // aquí solo devolvemos mensaje para ejemplo
         return new JsonResponse([
-            'message' => 'Login exitoso',
-            'email' => $lastEmail,
-        ]);
+            'status' => 'error',
+            'error' => $error->getMessage(),
+            'last_email' => $lastEmail,
+            'input_email' => $email,
+        ], 401);
     }
 
     #[Route(path: '/logout', name: 'logout')]
