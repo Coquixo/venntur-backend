@@ -12,12 +12,13 @@
     {% endif %}
 
     <form action="{{ path('login') }}" method="post">
-        <label for="username">Email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" required autofocus>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" value="{{ last_email }}" required autofocus>
 
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="_password" required>
 
         <button type="submit">Ingresar</button>
     </form>
+
 {% endblock %}
