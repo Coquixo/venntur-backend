@@ -61,7 +61,7 @@ class ProveedorApiController extends AbstractController
                 'id' => $actividad->getId(),
                 'nombre' => $actividad->getNombre(),
                 'descripcion_corta' => $actividad->getDescripcionCorta(),
-                'descripcion_larga' => $actividad->getDescripcionLarga(),
+
                 'precio' => $actividad->getPrecio(),
                 'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
             ];
