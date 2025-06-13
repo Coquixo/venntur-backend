@@ -35,6 +35,7 @@ Reemplaza `username`, `password` y `mi_base` con tus propios valores.
 Por ejemplo:
  - DATABASE_URL="mysql://root:@127.0.0.1:3306/venntur?serverVersion=9.3.0" 
 
+(en este caso no estamos asignando contraseña al usuario root, pero puedes asignarle una si lo deseas).
 ## 3. Crear la base de datos
 
 ###  Crear la base de datos automáticamente con Symfony
@@ -66,6 +67,13 @@ Para verificar que las tablas se hayan creado correctamente, puedes conectarte a
 
 ```bash
 php bin/console doctrine:schema:validate
+```
+
+(también puedes lanzar estos comandos para conectarte a la BBDD y verificar que hay datos):
+```bash
+php bin/console doctrine:query:sql "SELECT * FROM proveedor LIMIT 5;"
+php bin/console doctrine:query:sql "SELECT * FROM actividad LIMIT 5;"
+php bin/console doctrine:query:sql "SELECT * FROM user LIMIT 5;"
 ```
 
 ## 7. Levantar el servidor

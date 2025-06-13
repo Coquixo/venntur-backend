@@ -31,9 +31,10 @@ class Actividad
     #[Groups(['list', 'detail'])]
     private ?float $precio = null;
 
-    #[ORM\ManyToOne(targetEntity: Proveedor::class)]
+    #[ORM\ManyToOne(targetEntity: Proveedor::class, inversedBy: 'actividades')]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups(['list', 'detail'])]
+
     private ?Proveedor $proveedor = null;
 
     public function getId(): ?int
