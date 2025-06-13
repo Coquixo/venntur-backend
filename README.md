@@ -86,3 +86,8 @@ php -S 127.0.0.1:8080 -t public
 ```
 El servidor estará disponible en `http://127.0.0.1:8080`.
 Puedes modificar el puerto en caso de ser neceesario. El puerto que se use será importante ya que deberás apuntar a el en el proyecto de frontend.
+
+## Extra:
+
+Este proyecto va acompañado de un frontend que puedes encontrar en el repositorio [venntur-frontend](https://github.com/Coquixo/venntur-frontend)
+Este es necesario y que el sistema de autentificación requiere un frontend para funcionar correctamente.
