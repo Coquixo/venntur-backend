@@ -14,11 +14,11 @@ class Proveedor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['list', 'detail'])]  // Permitimos serializar el id en listados y detalles
+    #[Groups(['list', 'detail'])]
     private ?int $id = null;
 
     #[ORM\Column(type: "string", length: 255)]
-    #[Groups(['list', 'detail'])]  // Permitimos serializar el nombre en listados y detalles
+    #[Groups(['list', 'detail'])]
     private ?string $nombre = null;
 
     #[ORM\OneToMany(mappedBy: 'proveedor', targetEntity: Actividad::class)]
