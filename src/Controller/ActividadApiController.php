@@ -6,7 +6,6 @@ use App\Repository\ActividadRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/actividades')]
@@ -53,26 +52,6 @@ class ActividadApiController extends AbstractController
             $actividad,
             'json',
             ['groups' => ['detail'], 'json_encode_options' => JSON_UNESCAPED_UNICODE]
-        );
-
-        return JsonResponse::fromJsonString($json);
-    }
-
-    #[Route('/search', name: 'api_actividad_search', methods: ['GET'])]
-    public function search(Request $request): JsonResponse
-    {
-        $query = $request->query->get('q', '');
-
-        $actividades = $this->actividadRepository->createQueryBuilder('a')
-            ->where('a.nombre LIKE :q')
-            ->setParameter('q', '%' . $query . '%')
-            ->getQuery()
-            ->getResult();
-
-        $json = $this->serializer->serialize(
-            $actividades,
-            'json',
-            ['groups' => ['list'], 'json_encode_options' => JSON_UNESCAPED_UNICODE]
         );
 
         return JsonResponse::fromJsonString($json);

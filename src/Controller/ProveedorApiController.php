@@ -35,32 +35,22 @@ class ProveedorApiController extends AbstractController
     {
         $proveedores = $this->proveedorRepository->findAll();
 
-        // Serializamos con el grupo 'list' para mostrar solo campos básicos
-        $json = $this->serializer->serialize($proveedores, 'json', ['groups' => ['list']]);
+        $data = array_map(function ($proveedor) {
+            return [
+                'id' => $proveedor->getId(),
+                'nombre' => $proveedor->getNombre(),
+                'tiene_actividades' => count($proveedor->getActividades()) > 0,
+                'actividades' => array_map(function ($actividad) {
+                    return [
+                        'id' => $actividad->getId(),
+                        'nombre' => $actividad->getNombre(),
+                        'descripcion_corta' => $actividad->getDescripcionCorta(),
+                        'precio' => $actividad->getPrecio()
+                    ];
+                }, $proveedor->getActividades()->toArray())
+            ];
+        }, $proveedores);
 
-        return JsonResponse::fromJsonString($json, 200, [], false);
-    }
-
-    #[Route('/actividades', name: 'api_actividades_proveedor', methods: ['GET'])]
-    public function actividadesConYSinProveedor(): JsonResponse
-    {
-        $actividadesConProveedor = $this->actividadRepository->createQueryBuilder('a')
-            ->where('a.proveedor IS NOT NULL')
-            ->getQuery()
-            ->getResult();
-
-        $actividadesSinProveedor = $this->actividadRepository->createQueryBuilder('a')
-            ->where('a.proveedor IS NULL')
-            ->getQuery()
-            ->getResult();
-
-        // Serializamos las actividades con grupo 'list' para excluir descripcion_larga
-        $jsonConProveedor = $this->serializer->serialize($actividadesConProveedor, 'json', ['groups' => ['list']]);
-        $jsonSinProveedor = $this->serializer->serialize($actividadesSinProveedor, 'json', ['groups' => ['list']]);
-
-        return new JsonResponse([
-            'con_proveedor' => json_decode($jsonConProveedor, true),
-            'sin_proveedor' => json_decode($jsonSinProveedor, true),
-        ], 200, [], false);
+        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
     }
 }
