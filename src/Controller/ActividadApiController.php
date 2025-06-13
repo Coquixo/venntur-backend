@@ -7,15 +7,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/actividades')]
 class ActividadApiController extends AbstractController
 {
     private $actividadRepository;
+    private $serializer;
 
-    public function __construct(ActividadRepository $actividadRepository)
+    public function __construct(ActividadRepository $actividadRepository, SerializerInterface $serializer)
     {
         $this->actividadRepository = $actividadRepository;
+        $this->serializer = $serializer;
     }
 
     #[Route('', name: 'api_actividades_list', methods: ['GET'])]
@@ -25,20 +28,16 @@ class ActividadApiController extends AbstractController
         if (!$user) {
             return $this->json(['error' => 'No autenticado'], 401);
         }
+
         $actividades = $this->actividadRepository->findAll();
 
-        $data = array_map(function ($actividad) {
-            return [
-                'id' => $actividad->getId(),
-                'nombre' => $actividad->getNombre(),
-                'descripcion_corta' => $actividad->getDescripcionCorta(),
+        $json = $this->serializer->serialize(
+            $actividades,
+            'json',
+            ['groups' => ['list'], 'json_encode_options' => JSON_UNESCAPED_UNICODE]
+        );
 
-                'precio' => $actividad->getPrecio(),
-                'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
-            ];
-        }, $actividades);
-
-        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
+        return JsonResponse::fromJsonString($json);
     }
 
     #[Route('/{id}', name: 'api_actividad_detail', methods: ['GET'])]
@@ -50,16 +49,13 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Actividad no encontrada'], 404, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
         }
 
-        $data = [
-            'id' => $actividad->getId(),
-            'nombre' => $actividad->getNombre(),
-            'descripcion_corta' => $actividad->getDescripcionCorta(),
-            'descripcion_larga' => $actividad->getDescripcionLarga(),
-            'precio' => $actividad->getPrecio(),
-            'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
-        ];
+        $json = $this->serializer->serialize(
+            $actividad,
+            'json',
+            ['groups' => ['detail'], 'json_encode_options' => JSON_UNESCAPED_UNICODE]
+        );
 
-        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
+        return JsonResponse::fromJsonString($json);
     }
 
     #[Route('/search', name: 'api_actividad_search', methods: ['GET'])]
@@ -73,16 +69,12 @@ class ActividadApiController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        $data = array_map(function ($actividad) {
-            return [
-                'id' => $actividad->getId(),
-                'nombre' => $actividad->getNombre(),
-                'descripcion_corta' => $actividad->getDescripcionCorta(),
-                'precio' => $actividad->getPrecio(),
-                'proveedor' => $actividad->getProveedor() ? $actividad->getProveedor()->getNombre() : null,
-            ];
-        }, $actividades);
+        $json = $this->serializer->serialize(
+            $actividades,
+            'json',
+            ['groups' => ['list'], 'json_encode_options' => JSON_UNESCAPED_UNICODE]
+        );
 
-        return $this->json($data, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE]);
+        return JsonResponse::fromJsonString($json);
     }
 }

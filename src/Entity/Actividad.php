@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ActividadRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ActividadRepository::class)]
 class Actividad
@@ -11,22 +12,28 @@ class Actividad
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['list', 'detail'])]
     private ?int $id = null;
 
     #[ORM\Column(type: "string", length: 255)]
+    #[Groups(['list', 'detail'])]
     private ?string $nombre = null;
 
     #[ORM\Column(type: "string", length: 255)]
+    #[Groups(['list', 'detail'])]
     private ?string $descripcionCorta = null;
 
     #[ORM\Column(type: "text")]
+    #[Groups(['detail'])]
     private ?string $descripcionLarga = null;
 
     #[ORM\Column(type: "float", nullable: true)]
+    #[Groups(['list', 'detail'])]
     private ?float $precio = null;
 
     #[ORM\ManyToOne(targetEntity: Proveedor::class)]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['list', 'detail'])]
     private ?Proveedor $proveedor = null;
 
     public function getId(): ?int
