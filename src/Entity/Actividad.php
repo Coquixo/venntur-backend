@@ -22,7 +22,7 @@ class Actividad
     #[ORM\Column(type: "text")]
     private ?string $descripcionLarga = null;
 
-    #[ORM\Column(type: "float")]
+    #[ORM\Column(type: "float", nullable: true)]
     private ?float $precio = null;
 
     #[ORM\ManyToOne(targetEntity: Proveedor::class)]
@@ -72,11 +72,12 @@ class Actividad
         return $this->precio;
     }
 
-    public function setPrecio(float $precio): self
+    public function setPrecio(?float $precio): self
     {
         $this->precio = $precio;
         return $this;
     }
+
 
     public function getProveedor(): ?Proveedor
     {

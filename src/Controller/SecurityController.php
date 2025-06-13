@@ -35,10 +35,10 @@ class SecurityController extends AbstractController
         ], 402);
     }
 
-    #[Route(path: '/logout', name: 'logout')]
+    #[Route(path: '/logout', name: 'logout', methods: ['POST'])]
     public function logout()
     {
-        // Este método puede estar vacío, lo maneja Symfony automáticamente
-        throw new \Exception('Este método puede estar vacío - lo maneja Symfony');
+
+        return new JsonResponse(['status' => 'success', 'message' => 'Logged out successfully']);
     }
 }
